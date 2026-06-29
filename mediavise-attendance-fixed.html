@@ -1,0 +1,611 @@
+<div class="app">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    .app {
+      --bg: #F6F3EC;
+      --surface: #FFFFFF;
+      --ink: #1B2430;
+      --ink-soft: #5B6573;
+      --accent: #E2A33B;
+      --accent-deep: #B97E1F;
+      --good: #2F7A52;
+      --good-bg: #E4F0E8;
+      --late: #B6402F;
+      --late-bg: #F6E2DE;
+      --line: #E0DACB;
+      --admin: #3B5BE2;
+      --admin-bg: #EEF1FD;
+      --radius: 12px;
+      --shadow: 0 1px 2px rgba(27,36,48,0.05), 0 6px 18px rgba(27,36,48,0.06);
+
+      box-sizing: border-box;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 36px 22px 64px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .app *{ box-sizing: border-box; }
+    .app button{ font-family: inherit; cursor: pointer; }
+    .app input, .app select{ font-family: inherit; }
+
+    .eyebrow{
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .brand-mark{
+      width: 38px; height: 38px;
+      background: var(--ink);
+      color: var(--accent);
+      border-radius: 8px;
+      display:flex; align-items:center; justify-content:center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .brand-text h1{
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.02em;
+    }
+    .brand-text p{
+      margin: 2px 0 0;
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+    .clock-block{ text-align: right; }
+    .clock{
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.9rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .clock-date{
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    .timeline-card{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 26px 30px;
+      margin-bottom: 26px;
+    }
+    .timeline-head{
+      display:flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 26px;
+    }
+    .timeline-rules{ font-size: 0.82rem; color: var(--ink-soft); }
+    .timeline-rules b{ color: var(--ink); }
+    .timeline-track{
+      position: relative;
+      height: 10px;
+      background: var(--line);
+      border-radius: 6px;
+      margin: 30px 6px 14px;
+      overflow: visible;
+    }
+    .timeline-segment{ position: absolute; top: 0; bottom: 0; border-radius: 6px; }
+    .seg-on-time{ background: var(--good-bg); left: 0; }
+    .seg-after-hours{ background: var(--late-bg); }
+    .tick{
+      position: absolute; top: -8px;
+      width: 2px; height: 26px;
+      background: var(--ink); opacity: 0.55;
+      transform: translateX(-1px);
+    }
+    .tick-label{
+      position: absolute; top: 22px;
+      transform: translateX(-50%);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem; color: var(--ink-soft); white-space: nowrap;
+    }
+    .now-dot{
+      position: absolute; top: 50%;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid var(--surface);
+      box-shadow: 0 0 0 3px rgba(226,163,59,0.35);
+      transform: translate(-50%, -50%);
+      transition: left 0.4s linear;
+    }
+    .now-label{
+      position: absolute; bottom: 24px;
+      transform: translateX(-50%);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem; font-weight: 600; color: var(--accent-deep);
+      background: #FFF8EC; border: 1px solid var(--accent);
+      padding: 2px 7px; border-radius: 5px; white-space: nowrap;
+      transition: left 0.4s linear;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+    @media (min-width: 760px){
+      .grid{ grid-template-columns: 0.85fr 1.15fr; }
+    }
+    .panel{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 24px;
+    }
+    .panel-head{
+      display:flex; justify-content: space-between; align-items: center; gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    label.field-label{ display:block; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 6px; }
+    .name-input{
+      width: 100%; padding: 11px 12px;
+      border: 1px solid var(--line); border-radius: 8px;
+      font-size: 0.95rem; background: var(--bg); color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .name-input:focus{ outline: 2px solid var(--accent); outline-offset: 1px; }
+    .btn-row{ display:flex; gap: 10px; margin-bottom: 14px; }
+    .btn{
+      flex: 1; padding: 11px 14px; border-radius: 8px;
+      font-size: 0.88rem; font-weight: 600; border: 1.5px solid transparent;
+      transition: transform 0.05s ease;
+    }
+    .btn:active{ transform: scale(0.98); }
+    .btn-in{ background: var(--ink); color: #fff; }
+    .btn-in:hover{ background: #2b3645; }
+    .btn-out{ background: var(--surface); color: var(--ink); border-color: var(--ink); }
+    .btn-out:hover{ background: var(--bg); }
+    .status-box{
+      border-radius: 8px; padding: 11px 13px;
+      font-size: 0.85rem; min-height: 20px;
+      border: 1px solid var(--line); background: var(--bg); color: var(--ink-soft);
+    }
+    .status-box.good{ background: var(--good-bg); color: var(--good); border-color: var(--good); }
+    .status-box.late{ background: var(--late-bg); color: var(--late); border-color: var(--late); }
+    .status-box.error{ background: var(--late-bg); color: var(--late); border-color: var(--late); }
+    .legend{
+      margin-top: 16px; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.5;
+      border-top: 1px solid var(--line); padding-top: 14px;
+    }
+
+    /* Admin */
+    .admin-toggle{
+      display: inline-block;
+      padding: 6px 14px; border-radius: 7px;
+      font-size: 0.78rem; font-weight: 600;
+      background: var(--admin-bg); color: var(--admin);
+      border: 1.5px solid var(--admin); cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .admin-section{
+      background: var(--admin-bg); border: 1.5px solid var(--admin);
+      border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px;
+    }
+    .admin-eyebrow{
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--admin); margin-bottom: 12px; display: block;
+    }
+    .admin-row{ display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
+    .admin-field{ flex: 1; min-width: 120px; }
+    .admin-field label{ display:block; font-size: 0.73rem; color: var(--ink-soft); margin-bottom: 4px; }
+    .admin-field input, .admin-field select{
+      width: 100%; padding: 8px 10px;
+      border: 1px solid var(--line); border-radius: 7px;
+      font-size: 0.86rem; background: var(--surface); color: var(--ink);
+    }
+    .btn-admin{
+      padding: 9px 18px; border-radius: 7px;
+      font-size: 0.85rem; font-weight: 600;
+      background: var(--ink); color: #fff; border: none; cursor: pointer;
+      align-self: flex-end; white-space: nowrap;
+    }
+    .btn-admin:hover{ background: #2b3645; }
+    .admin-status{
+      font-size: 0.8rem; padding: 8px 10px; border-radius: 7px;
+      border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+    }
+    .admin-status.good{ background: var(--good-bg); color: var(--good); border-color: var(--good); }
+    .admin-status.error{ background: var(--late-bg); color: var(--late); border-color: var(--late); }
+
+    /* Ledger */
+    .date-input{
+      padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px;
+      font-size: 0.82rem; background: var(--bg); color: var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .stats-row{ display:flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .stat-chip{
+      flex: 1; min-width: 90px; background: var(--bg);
+      border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px;
+    }
+    .stat-num{ font-family: 'IBM Plex Mono', monospace; font-size: 1.15rem; font-weight: 600; }
+    .stat-label{ font-size: 0.68rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+    table.ledger{ width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    table.ledger th{
+      text-align: left; font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--ink-soft);
+      border-bottom: 1px solid var(--line); padding: 6px 8px;
+    }
+    table.ledger td{
+      padding: 9px 8px; border-bottom: 1px solid var(--line);
+      font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+    }
+    table.ledger td.name-cell{ font-family: 'Inter', sans-serif; font-weight: 500; }
+    .pill{
+      display:inline-block; padding: 2px 8px; border-radius: 999px;
+      font-size: 0.7rem; font-weight: 600; font-family: 'Inter', sans-serif;
+    }
+    .pill.good{ background: var(--good-bg); color: var(--good); }
+    .pill.late{ background: var(--late-bg); color: var(--late); }
+    .pill.muted{ background: var(--bg); color: var(--ink-soft); }
+    .pill.adm{ background: var(--admin-bg); color: var(--admin); font-size: 0.6rem; margin-left: 4px; }
+    .btn-del{
+      padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 600;
+      background: var(--late-bg); color: var(--late); border: 1px solid var(--late);
+      cursor: pointer; white-space: nowrap;
+    }
+    .btn-del:hover{ background: var(--late); color: #fff; }
+    .empty-state{ text-align: center; padding: 32px 10px; color: var(--ink-soft); font-size: 0.86rem; }
+    .share-note{ font-size: 0.72rem; color: var(--ink-soft); margin-top: 12px; }
+  </style>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div class="brand-text">
+        <h1>MEDIAVISE</h1>
+        <p>Attendance ledger</p>
+      </div>
+    </div>
+    <div class="clock-block">
+      <div class="clock" id="liveClock">--:--:--</div>
+      <div class="clock-date" id="liveDate">loading</div>
+    </div>
+  </div>
+
+  <div class="timeline-card">
+    <div class="timeline-head">
+      <div class="eyebrow">Day timeline</div>
+      <div class="timeline-rules">Check in by <b>12:30 PM</b> to stay On Time · Day runs until <b>8:00 PM</b></div>
+    </div>
+    <div class="timeline-track" id="track">
+      <div class="timeline-segment seg-on-time" id="segOnTime"></div>
+      <div class="timeline-segment seg-after-hours" id="segAfterHours"></div>
+      <div class="tick" id="tickLate"></div>
+      <div class="tick-label" id="tickLateLabel">12:30 PM</div>
+      <div class="tick" id="tickEnd"></div>
+      <div class="tick-label" id="tickEndLabel">8:00 PM</div>
+      <div class="now-label" id="nowLabel">now</div>
+      <div class="now-dot" id="nowDot"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="eyebrow">Punch card</div>
+      </div>
+
+      <button class="admin-toggle" id="adminToggleBtn" onclick="toggleAdmin()">⚙ Admin punch</button>
+
+      <div class="admin-section" id="adminSection" style="display:none;">
+        <span class="admin-eyebrow">Admin — Manual Punch</span>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label>Employee name</label>
+            <input type="text" id="adminName" placeholder="e.g. Ali Hassan" autocomplete="off">
+          </div>
+          <div class="admin-field">
+            <label>Type</label>
+            <select id="adminType">
+              <option value="in">Check In</option>
+              <option value="out">Check Out</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label>Time (24hr)</label>
+            <input type="time" id="adminTime">
+          </div>
+          <div class="admin-field">
+            <label>Date</label>
+            <input type="date" id="adminDate">
+          </div>
+          <button class="btn-admin" onclick="adminPunch()">Punch</button>
+        </div>
+        <div class="admin-status" id="adminStatus">Fill in details above and hit Punch.</div>
+      </div>
+
+      <label class="field-label" for="nameInput">Your name</label>
+      <input class="name-input" id="nameInput" type="text" placeholder="e.g. Asha Rao" autocomplete="off">
+      <div class="btn-row">
+        <button class="btn btn-in" id="checkInBtn">Check in</button>
+        <button class="btn btn-out" id="checkOutBtn">Check out</button>
+      </div>
+      <div class="status-box" id="statusBox">Pick a name and punch in to get started.</div>
+      <div class="legend">
+        On Time = checked in at or before 12:30 PM. Late = checked in after 12:30 PM.<br>
+        Full Day = checked out at or after 8:00 PM. Left Early = checked out before 8:00 PM.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="eyebrow">Today's ledger</div>
+        <input class="date-input" id="dateInput" type="date">
+      </div>
+      <div class="stats-row">
+        <div class="stat-chip"><div class="stat-num" id="statPresent">0</div><div class="stat-label">Checked in</div></div>
+        <div class="stat-chip"><div class="stat-num" id="statLate">0</div><div class="stat-label">Late</div></div>
+        <div class="stat-chip"><div class="stat-num" id="statOut">0</div><div class="stat-label">Checked out</div></div>
+      </div>
+      <div id="ledgerWrap">
+        <div class="empty-state">Loading ledger…</div>
+      </div>
+      <div class="share-note">Data stored locally on this device (localStorage).</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const LATE_CUTOFF_MIN = 12 * 60 + 30;
+  const DAYEND_CUTOFF_MIN = 20 * 60;
+  const DAY_MIN = 24 * 60;
+  const pad = n => n.toString().padStart(2, '0');
+
+  function todayStr(d = new Date()){
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+  function minSinceMid(d = new Date()){
+    return d.getHours()*60 + d.getMinutes() + d.getSeconds()/60;
+  }
+  function fmtClock(d = new Date()){
+    let h = d.getHours();
+    const ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if(!h) h = 12;
+    return `${h}:${pad(d.getMinutes())}:${pad(d.getSeconds())} ${ap}`;
+  }
+  function fmtShort(iso){
+    if(!iso) return '—';
+    const d = new Date(iso);
+    let h = d.getHours();
+    const ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if(!h) h = 12;
+    return `${h}:${pad(d.getMinutes())} ${ap}`;
+  }
+  function slug(name){
+    const s = name.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    return s || 'guest';
+  }
+  function esc(s){
+    return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // localStorage helpers
+  function getRec(dateStr, key){
+    try{ const v=localStorage.getItem(`att:${dateStr}:${key}`); return v?JSON.parse(v):null; }catch(e){ return null; }
+  }
+  function saveRec(dateStr, key, rec){
+    try{ localStorage.setItem(`att:${dateStr}:${key}`, JSON.stringify(rec)); return true; }catch(e){ return false; }
+  }
+  function listRecs(dateStr){
+    const pfx=`att:${dateStr}:`, out=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith(pfx)){ try{ const r=JSON.parse(localStorage.getItem(k)); if(r) out.push(r); }catch(e){} }
+    }
+    return out;
+  }
+
+  // Clock
+  const liveClock=document.getElementById('liveClock');
+  const liveDate=document.getElementById('liveDate');
+  const nowDot=document.getElementById('nowDot');
+  const nowLabel=document.getElementById('nowLabel');
+  const latePct=(LATE_CUTOFF_MIN/DAY_MIN)*100;
+  const endPct=(DAYEND_CUTOFF_MIN/DAY_MIN)*100;
+  document.getElementById('segOnTime').style.width=latePct+'%';
+  document.getElementById('segAfterHours').style.cssText=`left:${endPct}%;right:0`;
+  document.getElementById('tickLate').style.left=latePct+'%';
+  document.getElementById('tickLateLabel').style.left=latePct+'%';
+  document.getElementById('tickEnd').style.left=endPct+'%';
+  document.getElementById('tickEndLabel').style.left=endPct+'%';
+
+  function tickClock(){
+    const now=new Date();
+    liveClock.textContent=fmtClock(now);
+    liveDate.textContent=now.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+    const pct=Math.max(0,Math.min(100,(minSinceMid(now)/DAY_MIN)*100));
+    nowDot.style.left=pct+'%';
+    nowLabel.style.left=pct+'%';
+    nowLabel.textContent=fmtClock(now).replace(/:\d\d /,' ');
+  }
+  tickClock(); setInterval(tickClock,1000);
+
+  // Admin toggle
+  window.toggleAdmin=function(){
+    const sec=document.getElementById('adminSection');
+    const btn=document.getElementById('adminToggleBtn');
+    const open=sec.style.display!=='none';
+    sec.style.display=open?'none':'block';
+    btn.textContent=open?'⚙ Admin punch':'✕ Close admin';
+    if(!open){
+      const now=new Date();
+      document.getElementById('adminDate').value=todayStr(now);
+      document.getElementById('adminTime').value=`${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    }
+  };
+
+  // Admin punch
+  window.adminPunch=function(){
+    const name=document.getElementById('adminName').value.trim();
+    const type=document.getElementById('adminType').value;
+    const timeVal=document.getElementById('adminTime').value;
+    const dateVal=document.getElementById('adminDate').value;
+    const st=document.getElementById('adminStatus');
+
+    function setAdm(msg,cls){ st.textContent=msg; st.className='admin-status'+(cls?' '+cls:''); }
+
+    if(!name){ setAdm('Enter employee name.','error'); return; }
+    if(!timeVal){ setAdm('Enter a time.','error'); return; }
+    if(!dateVal){ setAdm('Enter a date.','error'); return; }
+
+    const [hh,mm]=timeVal.split(':').map(Number);
+    const punchDate=new Date(dateVal);
+    punchDate.setHours(hh,mm,0,0);
+    const mins=hh*60+mm;
+
+    const key=slug(name);
+    let rec=getRec(dateVal,key)||{name,checkIn:null,checkInStatus:null,checkOut:null,checkOutStatus:null,byAdmin:false};
+
+    if(type==='in'){
+      rec.name=name;
+      rec.checkIn=punchDate.toISOString();
+      rec.checkInStatus=mins<=LATE_CUTOFF_MIN?'On Time':'Late';
+      rec.byAdmin=true;
+      if(saveRec(dateVal,key,rec)){
+        setAdm(`✓ ${name} → In at ${fmtShort(rec.checkIn)} · ${rec.checkInStatus}`,'good');
+        refreshLedger();
+      } else { setAdm('Save failed.','error'); }
+    } else {
+      if(!rec.checkIn){ setAdm(`No check-in found for ${name} on ${dateVal}. Add check-in first.`,'error'); return; }
+      rec.checkOut=punchDate.toISOString();
+      rec.checkOutStatus=mins>=DAYEND_CUTOFF_MIN?'Full Day':'Left Early';
+      rec.byAdmin=true;
+      if(saveRec(dateVal,key,rec)){
+        setAdm(`✓ ${name} → Out at ${fmtShort(rec.checkOut)} · ${rec.checkOutStatus}`,'good');
+        refreshLedger();
+      } else { setAdm('Save failed.','error'); }
+    }
+  };
+
+  // Regular punch
+  const nameInput=document.getElementById('nameInput');
+  const statusBox=document.getElementById('statusBox');
+  const checkInBtn=document.getElementById('checkInBtn');
+  const checkOutBtn=document.getElementById('checkOutBtn');
+
+  function setStatus(msg,cls){
+    statusBox.textContent=msg;
+    statusBox.className='status-box'+(cls?' '+cls:'');
+  }
+
+  checkInBtn.addEventListener('click',()=>{
+    const name=nameInput.value.trim();
+    if(!name){ setStatus('Enter your name to check in.','error'); return; }
+    checkInBtn.disabled=true;
+    const dateStr=todayStr();
+    const key=slug(name);
+    const ex=getRec(dateStr,key);
+    if(ex&&ex.checkIn){
+      setStatus(`Already checked in at ${fmtShort(ex.checkIn)} · ${ex.checkInStatus}`,ex.checkInStatus==='Late'?'late':'good');
+      checkInBtn.disabled=false; return;
+    }
+    const now=new Date();
+    const status=minSinceMid(now)<=LATE_CUTOFF_MIN?'On Time':'Late';
+    const rec=ex||{name,checkIn:null,checkInStatus:null,checkOut:null,checkOutStatus:null,byAdmin:false};
+    rec.name=name; rec.checkIn=now.toISOString(); rec.checkInStatus=status;
+    if(saveRec(dateStr,key,rec)){
+      setStatus(`Checked in at ${fmtShort(rec.checkIn)} · ${status}`,status==='Late'?'late':'good');
+      refreshLedger();
+    } else { setStatus('Could not save. Try again.','error'); }
+    checkInBtn.disabled=false;
+  });
+
+  checkOutBtn.addEventListener('click',()=>{
+    const name=nameInput.value.trim();
+    if(!name){ setStatus('Enter your name to check out.','error'); return; }
+    checkOutBtn.disabled=true;
+    const dateStr=todayStr();
+    const key=slug(name);
+    const ex=getRec(dateStr,key);
+    if(!ex||!ex.checkIn){ setStatus('No check-in found. Check in first.','error'); checkOutBtn.disabled=false; return; }
+    if(ex.checkOut){
+      setStatus(`Already checked out at ${fmtShort(ex.checkOut)} · ${ex.checkOutStatus}`,ex.checkOutStatus==='Left Early'?'late':'good');
+      checkOutBtn.disabled=false; return;
+    }
+    const now=new Date();
+    const status=minSinceMid(now)>=DAYEND_CUTOFF_MIN?'Full Day':'Left Early';
+    ex.checkOut=now.toISOString(); ex.checkOutStatus=status;
+    if(saveRec(dateStr,key,ex)){
+      setStatus(`Checked out at ${fmtShort(ex.checkOut)} · ${status}`,status==='Left Early'?'late':'good');
+      refreshLedger();
+    } else { setStatus('Could not save. Try again.','error'); }
+    checkOutBtn.disabled=false;
+  });
+
+  // Ledger
+  const dateInput=document.getElementById('dateInput');
+  const ledgerWrap=document.getElementById('ledgerWrap');
+  dateInput.value=todayStr();
+
+  function renderLedger(records, dateStr){
+    document.getElementById('statPresent').textContent=records.length;
+    document.getElementById('statLate').textContent=records.filter(r=>r.checkInStatus==='Late').length;
+    document.getElementById('statOut').textContent=records.filter(r=>r.checkOut).length;
+
+    if(!records.length){ ledgerWrap.innerHTML='<div class="empty-state">No punches yet for this day.</div>'; return; }
+    records.sort((a,b)=>(a.checkIn||'').localeCompare(b.checkIn||''));
+    const rows=records.map(r=>{
+      const admTag=r.byAdmin?'<span class="pill adm">admin</span>':'';
+      const inPill=r.checkInStatus==='Late'?`<span class="pill late">Late</span>`:`<span class="pill good">On Time</span>`;
+      const outPill=!r.checkOut?`<span class="pill muted">—</span>`:(r.checkOutStatus==='Left Early'?`<span class="pill late">Left Early</span>`:`<span class="pill good">Full Day</span>`);
+      return `<tr>
+        <td class="name-cell">${esc(r.name)}${admTag}</td>
+        <td>${fmtShort(r.checkIn)}</td>
+        <td>${inPill}</td>
+        <td>${r.checkOut?fmtShort(r.checkOut):'—'}</td>
+        <td>${outPill}</td>
+        <td><button class="btn-del" onclick="deleteRec('${dateStr}','${slug(r.name)}')">✕ Delete</button></td>
+      </tr>`;
+    }).join('');
+    ledgerWrap.innerHTML=`<table class="ledger"><thead><tr><th>Name</th><th>In</th><th>In status</th><th>Out</th><th>Out status</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  function refreshLedger(){
+    const dateStr=dateInput.value||todayStr();
+    renderLedger(listRecs(dateStr), dateStr);
+  }
+
+  window.deleteRec=function(dateStr, key){
+    if(!confirm('Delete this record?')) return;
+    localStorage.removeItem(`att:${dateStr}:${key}`);
+    refreshLedger();
+  };
+
+  dateInput.addEventListener('change',refreshLedger);
+  refreshLedger();
+  setInterval(refreshLedger,20000);
+})();
+</script>
