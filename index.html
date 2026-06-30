@@ -221,6 +221,7 @@
   width:100%; padding:12px 14px; border-radius:10px;
   border:1px solid var(--line); background:var(--bg-soft); color:var(--text);
   font-size:0.95rem; margin-bottom:14px; transition:border-color 0.2s, box-shadow 0.2s;
+  color-scheme: dark;
 }
 .mv-input:focus{ outline:none; border-color:var(--grad-3); box-shadow:0 0 0 3px rgba(127,95,255,0.18); }
 
@@ -270,6 +271,7 @@
 .mv-admin-field input, .mv-admin-field select{
   width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:8px;
   font-size:0.85rem; background:var(--bg-soft); color:var(--text);
+  color-scheme: dark;
 }
 .mv-btn-admin{
   padding:10px 18px; border-radius:9px; font-size:0.84rem; font-weight:700;
@@ -288,6 +290,7 @@
 .mv-date-input{
   padding:8px 11px; border:1px solid var(--line); border-radius:9px; font-size:0.8rem;
   background:var(--bg-soft); color:var(--text); font-family:'JetBrains Mono',monospace;
+  color-scheme: dark;
 }
 .mv-table-wrap{ overflow-x:auto; }
 table.mv-ledger{ width:100%; border-collapse:collapse; font-size:0.84rem; min-width:560px; }
@@ -295,7 +298,7 @@ table.mv-ledger th{
   text-align:left; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-dim);
   border-bottom:1px solid var(--line); padding:8px;
 }
-table.mv-ledger td{ padding:11px 8px; border-bottom:1px solid var(--line); font-family:'JetBrains Mono',monospace; font-size:0.82rem; }
+table.mv-ledger td{ padding:11px 8px; border-bottom:1px solid var(--line); font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--text); }
 table.mv-ledger tbody tr{ transition: background 0.15s ease; }
 table.mv-ledger tbody tr:hover{ background:rgba(255,255,255,0.03); }
 table.mv-ledger td.mv-name-cell{ font-family:'Inter',sans-serif; font-weight:600; }
@@ -382,7 +385,6 @@ table.mv-ledger td.mv-name-cell{ font-family:'Inter',sans-serif; font-weight:600
       <h1>Attendance Dashboard</h1>
       <p>Track punches, manage records, export reports.</p>
     </div>
-    <div class="mv-status-chip"><span class="dot"></span> Live tracking</div>
   </div>
 
   <div class="mv-stats">
