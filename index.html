@@ -1,330 +1,452 @@
-<div class="app">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+<div class="mv-app">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    .app {
-      --bg: #F6F3EC;
-      --surface: #FFFFFF;
-      --ink: #1B2430;
-      --ink-soft: #5B6573;
-      --accent: #E2A33B;
-      --accent-deep: #B97E1F;
-      --good: #2F7A52;
-      --good-bg: #E4F0E8;
-      --late: #B6402F;
-      --late-bg: #F6E2DE;
-      --line: #E0DACB;
-      --admin: #3B5BE2;
-      --admin-bg: #EEF1FD;
-      --radius: 12px;
-      --shadow: 0 1px 2px rgba(27,36,48,0.05), 0 6px 18px rgba(27,36,48,0.06);
+.mv-app{
+  --bg: #0E0B1F;
+  --bg-soft: #15112B;
+  --panel: #1B1638;
+  --panel-2: #221C45;
+  --line: rgba(255,255,255,0.08);
+  --text: #F4F2FF;
+  --text-dim: #9A93C2;
+  --grad-1: #FF5F6D;
+  --grad-2: #FFC371;
+  --grad-3: #7F5FFF;
+  --grad-4: #36D6E8;
+  --grad-5: #FF4FD8;
+  --good: #2EE6A8;
+  --good-bg: rgba(46,230,168,0.12);
+  --late: #FF6B6B;
+  --late-bg: rgba(255,107,107,0.12);
+  --admin: #7F5FFF;
+  --admin-bg: rgba(127,95,255,0.14);
+  --radius: 18px;
+  --radius-sm: 12px;
 
-      box-sizing: border-box;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'Inter', sans-serif;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 36px 22px 64px;
-      -webkit-font-smoothing: antialiased;
-    }
-    .app *{ box-sizing: border-box; }
-    .app button{ font-family: inherit; cursor: pointer; }
-    .app input, .app select{ font-family: inherit; }
+  box-sizing:border-box;
+  background: var(--bg);
+  color: var(--text);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  display:flex;
+  position:relative;
+  overflow-x:hidden;
+  isolation:isolate;
+}
+.mv-app *{ box-sizing:border-box; }
+.mv-app button{ font-family:inherit; cursor:pointer; }
+.mv-app input, .mv-app select{ font-family:inherit; }
 
-    .eyebrow{
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-    }
+.mv-app::before{
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(900px 500px at 8% -5%, rgba(127,95,255,0.35), transparent 60%),
+    radial-gradient(700px 500px at 100% 0%, rgba(255,95,109,0.22), transparent 55%),
+    radial-gradient(600px 600px at 50% 110%, rgba(54,214,232,0.16), transparent 60%);
+  z-index:-1;
+  pointer-events:none;
+}
 
-    .topbar{
-      display:flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-bottom: 26px;
-      padding-bottom: 22px;
-      border-bottom: 1px solid var(--line);
-    }
-    .brand{ display:flex; align-items:center; gap:12px; }
-    .brand-mark{
-      width: 38px; height: 38px;
-      background: var(--ink);
-      color: var(--accent);
-      border-radius: 8px;
-      display:flex; align-items:center; justify-content:center;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-    .brand-text h1{
-      margin: 0;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 0.02em;
-    }
-    .brand-text p{
-      margin: 2px 0 0;
-      font-size: 0.78rem;
-      color: var(--ink-soft);
-    }
-    .clock-block{ text-align: right; }
-    .clock{
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 1.9rem;
-      font-weight: 600;
-      line-height: 1;
-    }
-    .clock-date{
-      font-size: 0.72rem;
-      color: var(--ink-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-top: 4px;
-    }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+@keyframes popIn{ from{opacity:0; transform:scale(0.92);} to{opacity:1; transform:scale(1);} }
+@keyframes pulseDot{ 0%,100%{ box-shadow:0 0 0 0 rgba(46,230,168,0.45);} 50%{ box-shadow:0 0 0 7px rgba(46,230,168,0);} }
+@keyframes gradientShift{ 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+@keyframes shimmer{ 0%{ background-position:-200% 0; } 100%{ background-position:200% 0; } }
+@keyframes ringSpin{ to{ transform:rotate(360deg); } }
+@keyframes floatY{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
 
-    .timeline-card{
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px 26px 30px;
-      margin-bottom: 26px;
-    }
-    .timeline-head{
-      display:flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px;
-      margin-bottom: 26px;
-    }
-    .timeline-rules{ font-size: 0.82rem; color: var(--ink-soft); }
-    .timeline-rules b{ color: var(--ink); }
-    .timeline-track{
-      position: relative;
-      height: 10px;
-      background: var(--line);
-      border-radius: 6px;
-      margin: 30px 6px 14px;
-      overflow: visible;
-    }
-    .timeline-segment{ position: absolute; top: 0; bottom: 0; border-radius: 6px; }
-    .seg-on-time{ background: var(--good-bg); left: 0; }
-    .seg-after-hours{ background: var(--late-bg); }
-    .tick{
-      position: absolute; top: -8px;
-      width: 2px; height: 26px;
-      background: var(--ink); opacity: 0.55;
-      transform: translateX(-1px);
-    }
-    .tick-label{
-      position: absolute; top: 22px;
-      transform: translateX(-50%);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.68rem; color: var(--ink-soft); white-space: nowrap;
-    }
-    .now-dot{
-      position: absolute; top: 50%;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: var(--accent);
-      border: 3px solid var(--surface);
-      box-shadow: 0 0 0 3px rgba(226,163,59,0.35);
-      transform: translate(-50%, -50%);
-      transition: left 0.4s linear;
-    }
-    .now-label{
-      position: absolute; bottom: 24px;
-      transform: translateX(-50%);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem; font-weight: 600; color: var(--accent-deep);
-      background: #FFF8EC; border: 1px solid var(--accent);
-      padding: 2px 7px; border-radius: 5px; white-space: nowrap;
-      transition: left 0.4s linear;
-    }
+@media (prefers-reduced-motion: reduce){
+  .mv-app *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+}
 
-    .grid{
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 22px;
-    }
-    @media (min-width: 760px){
-      .grid{ grid-template-columns: 0.85fr 1.15fr; }
-    }
-    .panel{
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px 24px;
-    }
-    .panel-head{
-      display:flex; justify-content: space-between; align-items: center; gap: 10px;
-      margin-bottom: 18px;
-    }
+/* ---------- Sidebar ---------- */
+.mv-sidebar{
+  width:240px;
+  flex-shrink:0;
+  background: linear-gradient(180deg, rgba(34,28,69,0.9), rgba(14,11,31,0.95));
+  border-right:1px solid var(--line);
+  padding:26px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  z-index:5;
+}
+.mv-logo{
+  display:flex; align-items:center; gap:11px;
+  animation: fadeUp 0.6s ease both;
+}
+.mv-logo-mark{
+  width:38px; height:38px; border-radius:11px;
+  background:linear-gradient(135deg, var(--grad-3), var(--grad-5), var(--grad-1));
+  background-size:200% 200%;
+  animation:gradientShift 6s ease infinite;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Outfit',sans-serif; font-weight:800; font-size:1.05rem; color:#fff;
+  box-shadow:0 6px 18px rgba(127,95,255,0.4);
+}
+.mv-logo-text strong{ display:block; font-family:'Outfit',sans-serif; font-size:1.02rem; font-weight:700; letter-spacing:0.01em; }
+.mv-logo-text span{ display:block; font-size:0.68rem; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase; margin-top:1px; }
 
-    label.field-label{ display:block; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 6px; }
-    .name-input{
-      width: 100%; padding: 11px 12px;
-      border: 1px solid var(--line); border-radius: 8px;
-      font-size: 0.95rem; background: var(--bg); color: var(--ink);
-      margin-bottom: 14px;
-    }
-    .name-input:focus{ outline: 2px solid var(--accent); outline-offset: 1px; }
-    .btn-row{ display:flex; gap: 10px; margin-bottom: 14px; }
-    .btn{
-      flex: 1; padding: 11px 14px; border-radius: 8px;
-      font-size: 0.88rem; font-weight: 600; border: 1.5px solid transparent;
-      transition: transform 0.05s ease;
-    }
-    .btn:active{ transform: scale(0.98); }
-    .btn-in{ background: var(--ink); color: #fff; }
-    .btn-in:hover{ background: #2b3645; }
-    .btn-out{ background: var(--surface); color: var(--ink); border-color: var(--ink); }
-    .btn-out:hover{ background: var(--bg); }
-    .status-box{
-      border-radius: 8px; padding: 11px 13px;
-      font-size: 0.85rem; min-height: 20px;
-      border: 1px solid var(--line); background: var(--bg); color: var(--ink-soft);
-    }
-    .status-box.good{ background: var(--good-bg); color: var(--good); border-color: var(--good); }
-    .status-box.late{ background: var(--late-bg); color: var(--late); border-color: var(--late); }
-    .status-box.error{ background: var(--late-bg); color: var(--late); border-color: var(--late); }
-    .legend{
-      margin-top: 16px; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.5;
-      border-top: 1px solid var(--line); padding-top: 14px;
-    }
+.mv-nav{ display:flex; flex-direction:column; gap:4px; }
+.mv-nav-item{
+  display:flex; align-items:center; gap:11px;
+  padding:10px 12px; border-radius:10px;
+  font-size:0.86rem; font-weight:500; color:var(--text-dim);
+  transition: all 0.18s ease;
+  cursor:pointer;
+  animation: fadeUp 0.6s ease both;
+}
+.mv-nav-item svg{ flex-shrink:0; opacity:0.85; }
+.mv-nav-item:hover{ background:rgba(255,255,255,0.05); color:var(--text); transform:translateX(2px); }
+.mv-nav-item.active{
+  background:linear-gradient(90deg, rgba(127,95,255,0.22), rgba(127,95,255,0.02));
+  color:#fff; font-weight:600;
+  border:1px solid rgba(127,95,255,0.35);
+}
 
-    /* Admin */
-    .admin-toggle{
-      display: inline-block;
-      padding: 6px 14px; border-radius: 7px;
-      font-size: 0.78rem; font-weight: 600;
-      background: var(--admin-bg); color: var(--admin);
-      border: 1.5px solid var(--admin); cursor: pointer;
-      margin-bottom: 16px;
-    }
-    .admin-section{
-      background: var(--admin-bg); border: 1.5px solid var(--admin);
-      border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px;
-    }
-    .admin-eyebrow{
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--admin); margin-bottom: 12px; display: block;
-    }
-    .admin-row{ display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
-    .admin-field{ flex: 1; min-width: 120px; }
-    .admin-field label{ display:block; font-size: 0.73rem; color: var(--ink-soft); margin-bottom: 4px; }
-    .admin-field input, .admin-field select{
-      width: 100%; padding: 8px 10px;
-      border: 1px solid var(--line); border-radius: 7px;
-      font-size: 0.86rem; background: var(--surface); color: var(--ink);
-    }
-    .btn-admin{
-      padding: 9px 18px; border-radius: 7px;
-      font-size: 0.85rem; font-weight: 600;
-      background: var(--ink); color: #fff; border: none; cursor: pointer;
-      align-self: flex-end; white-space: nowrap;
-    }
-    .btn-admin:hover{ background: #2b3645; }
-    .admin-status{
-      font-size: 0.8rem; padding: 8px 10px; border-radius: 7px;
-      border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
-    }
-    .admin-status.good{ background: var(--good-bg); color: var(--good); border-color: var(--good); }
-    .admin-status.error{ background: var(--late-bg); color: var(--late); border-color: var(--late); }
+.mv-sidebar-clock{
+  margin-top:auto;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  padding:16px;
+  text-align:center;
+  animation: fadeUp 0.7s ease both;
+}
+.mv-sidebar-clock .t{
+  font-family:'JetBrains Mono',monospace; font-size:1.5rem; font-weight:700;
+  background:linear-gradient(90deg, var(--grad-4), var(--grad-3));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.mv-sidebar-clock .d{ font-size:0.68rem; color:var(--text-dim); margin-top:4px; text-transform:uppercase; letter-spacing:0.07em; }
 
-    /* Ledger */
-    .date-input{
-      padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px;
-      font-size: 0.82rem; background: var(--bg); color: var(--ink);
-      font-family: 'IBM Plex Mono', monospace;
-    }
-    .stats-row{ display:flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-    .stat-chip{
-      flex: 1; min-width: 90px; background: var(--bg);
-      border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px;
-    }
-    .stat-num{ font-family: 'IBM Plex Mono', monospace; font-size: 1.15rem; font-weight: 600; }
-    .stat-label{ font-size: 0.68rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+/* ---------- Main ---------- */
+.mv-main{ flex:1; min-width:0; padding:30px 34px 70px; max-width:1280px; }
 
-    table.ledger{ width: 100%; border-collapse: collapse; font-size: 0.84rem; }
-    table.ledger th{
-      text-align: left; font-size: 0.68rem; text-transform: uppercase;
-      letter-spacing: 0.06em; color: var(--ink-soft);
-      border-bottom: 1px solid var(--line); padding: 6px 8px;
-    }
-    table.ledger td{
-      padding: 9px 8px; border-bottom: 1px solid var(--line);
-      font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
-    }
-    table.ledger td.name-cell{ font-family: 'Inter', sans-serif; font-weight: 500; }
-    .pill{
-      display:inline-block; padding: 2px 8px; border-radius: 999px;
-      font-size: 0.7rem; font-weight: 600; font-family: 'Inter', sans-serif;
-    }
-    .pill.good{ background: var(--good-bg); color: var(--good); }
-    .pill.late{ background: var(--late-bg); color: var(--late); }
-    .pill.muted{ background: var(--bg); color: var(--ink-soft); }
-    .pill.adm{ background: var(--admin-bg); color: var(--admin); font-size: 0.6rem; margin-left: 4px; }
-    .btn-del{
-      padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 600;
-      background: var(--late-bg); color: var(--late); border: 1px solid var(--late);
-      cursor: pointer; white-space: nowrap;
-    }
-    .btn-del:hover{ background: var(--late); color: #fff; }
-    .empty-state{ text-align: center; padding: 32px 10px; color: var(--ink-soft); font-size: 0.86rem; }
-    .share-note{ font-size: 0.72rem; color: var(--ink-soft); margin-top: 12px; }
-  </style>
+.mv-topbar{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:18px; flex-wrap:wrap;
+  margin-bottom:28px;
+  animation: fadeUp 0.5s ease both;
+}
+.mv-greeting h1{
+  margin:0; font-family:'Outfit',sans-serif; font-size:1.7rem; font-weight:700; letter-spacing:-0.01em;
+}
+.mv-greeting p{ margin:5px 0 0; color:var(--text-dim); font-size:0.88rem; }
+.mv-status-chip{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:7px 14px; border-radius:999px;
+  background:var(--good-bg); border:1px solid rgba(46,230,168,0.35);
+  font-size:0.78rem; font-weight:600; color:var(--good);
+}
+.mv-status-chip .dot{ width:7px; height:7px; border-radius:50%; background:var(--good); animation:pulseDot 1.8s infinite; }
 
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-mark">M</div>
-      <div class="brand-text">
-        <h1>MEDIAVISE</h1>
-        <p>Attendance ledger</p>
-      </div>
+/* Stat cards */
+.mv-stats{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;
+}
+@media (max-width:900px){ .mv-stats{ grid-template-columns:repeat(2,1fr);} }
+.mv-stat-card{
+  position:relative; overflow:hidden;
+  border-radius:var(--radius);
+  padding:18px 20px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  animation: popIn 0.5s ease both;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.mv-stat-card:hover{ transform:translateY(-4px); box-shadow:0 14px 32px rgba(0,0,0,0.35); }
+.mv-stat-card::before{
+  content:''; position:absolute; inset:0; opacity:0.16; z-index:0;
+}
+.mv-stat-card.c1::before{ background:radial-gradient(circle at 100% 0%, var(--grad-3), transparent 65%); }
+.mv-stat-card.c2::before{ background:radial-gradient(circle at 100% 0%, var(--good), transparent 65%); }
+.mv-stat-card.c3::before{ background:radial-gradient(circle at 100% 0%, var(--late), transparent 65%); }
+.mv-stat-card.c4::before{ background:radial-gradient(circle at 100% 0%, var(--grad-4), transparent 65%); }
+.mv-stat-top{ display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; }
+.mv-stat-icon{
+  width:34px; height:34px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,0.06);
+}
+.mv-stat-label{ font-size:0.72rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:14px; position:relative; z-index:1; }
+.mv-stat-num{ font-family:'Outfit',sans-serif; font-size:2rem; font-weight:700; margin-top:2px; position:relative; z-index:1; }
+
+/* Timeline */
+.mv-timeline-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:22px 26px 28px; margin-bottom:24px;
+  animation: fadeUp 0.55s ease both;
+}
+.mv-timeline-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:30px; }
+.mv-eyebrow{ font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); }
+.mv-timeline-rules{ font-size:0.8rem; color:var(--text-dim); }
+.mv-timeline-rules b{ color:var(--text); }
+.mv-track{ position:relative; height:10px; border-radius:6px; background:rgba(255,255,255,0.06); margin:34px 6px 16px; }
+.mv-seg-good{ position:absolute; top:0; bottom:0; left:0; border-radius:6px 0 0 6px; background:linear-gradient(90deg, rgba(46,230,168,0.4), rgba(46,230,168,0.15)); }
+.mv-seg-late{ position:absolute; top:0; bottom:0; border-radius:0 6px 6px 0; background:linear-gradient(90deg, rgba(255,107,107,0.15), rgba(255,107,107,0.4)); }
+.mv-tick{ position:absolute; top:-8px; width:2px; height:26px; background:rgba(255,255,255,0.35); }
+.mv-tick-label{ position:absolute; top:22px; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--text-dim); white-space:nowrap; }
+.mv-now-dot{
+  position:absolute; top:50%; width:17px; height:17px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #fff, var(--grad-3) 60%);
+  border:3px solid var(--panel);
+  box-shadow:0 0 0 4px rgba(127,95,255,0.3), 0 0 16px rgba(127,95,255,0.6);
+  transform:translate(-50%,-50%); transition:left 0.4s linear;
+}
+.mv-now-label{
+  position:absolute; bottom:24px; transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700; color:#fff;
+  background:linear-gradient(135deg, var(--grad-3), var(--grad-5));
+  padding:3px 9px; border-radius:6px; white-space:nowrap; transition:left 0.4s linear;
+  box-shadow:0 4px 12px rgba(127,95,255,0.4);
+}
+
+/* Grid: punch + ledger */
+.mv-grid{ display:grid; grid-template-columns:1fr; gap:20px; }
+@media (min-width:920px){ .mv-grid{ grid-template-columns:0.78fr 1.22fr; } }
+
+.mv-panel{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:22px 24px; animation: fadeUp 0.6s ease both;
+}
+.mv-panel-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:18px; }
+
+.mv-field-label{ display:block; font-size:0.78rem; color:var(--text-dim); margin-bottom:7px; }
+.mv-input{
+  width:100%; padding:12px 14px; border-radius:10px;
+  border:1px solid var(--line); background:var(--bg-soft); color:var(--text);
+  font-size:0.95rem; margin-bottom:14px; transition:border-color 0.2s, box-shadow 0.2s;
+}
+.mv-input:focus{ outline:none; border-color:var(--grad-3); box-shadow:0 0 0 3px rgba(127,95,255,0.18); }
+
+.mv-btn-row{ display:flex; gap:10px; margin-bottom:14px; }
+.mv-btn{
+  flex:1; padding:13px 14px; border-radius:11px; font-size:0.88rem; font-weight:700;
+  border:none; position:relative; overflow:hidden; transition:transform 0.15s ease, box-shadow 0.15s ease;
+}
+.mv-btn:active{ transform:scale(0.97); }
+.mv-btn-in{
+  background:linear-gradient(135deg, var(--grad-3), var(--grad-5));
+  color:#fff; box-shadow:0 8px 20px rgba(127,95,255,0.35);
+}
+.mv-btn-in:hover{ box-shadow:0 10px 26px rgba(127,95,255,0.55); transform:translateY(-2px); }
+.mv-btn-out{
+  background:transparent; color:var(--text); border:1.5px solid var(--line);
+}
+.mv-btn-out:hover{ border-color:var(--grad-4); color:var(--grad-4); transform:translateY(-2px); }
+
+.mv-status-box{
+  border-radius:11px; padding:13px 15px; font-size:0.85rem; min-height:20px;
+  border:1px solid var(--line); background:var(--bg-soft); color:var(--text-dim);
+  transition: all 0.25s ease; animation: popIn 0.3s ease;
+}
+.mv-status-box.good{ background:var(--good-bg); color:var(--good); border-color:rgba(46,230,168,0.4); }
+.mv-status-box.late{ background:var(--late-bg); color:var(--late); border-color:rgba(255,107,107,0.4); }
+.mv-status-box.error{ background:var(--late-bg); color:var(--late); border-color:rgba(255,107,107,0.4); }
+
+.mv-legend{ margin-top:16px; font-size:0.74rem; color:var(--text-dim); line-height:1.6; border-top:1px solid var(--line); padding-top:14px; }
+
+/* Admin toggle */
+.mv-admin-toggle{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 14px; border-radius:999px; font-size:0.78rem; font-weight:600;
+  background:var(--admin-bg); color:var(--admin); border:1.5px solid rgba(127,95,255,0.35);
+  margin-bottom:16px; transition: all 0.2s ease;
+}
+.mv-admin-toggle:hover{ background:rgba(127,95,255,0.22); transform:translateY(-1px); }
+.mv-admin-section{
+  background:var(--admin-bg); border:1.5px solid rgba(127,95,255,0.35); border-radius:var(--radius-sm);
+  padding:16px 18px; margin-bottom:18px; animation: popIn 0.3s ease;
+}
+.mv-admin-eyebrow{ font-size:0.66rem; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; color:var(--admin); margin-bottom:12px; display:block; }
+.mv-admin-row{ display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:10px; }
+.mv-admin-field{ flex:1; min-width:120px; }
+.mv-admin-field label{ display:block; font-size:0.72rem; color:var(--text-dim); margin-bottom:4px; }
+.mv-admin-field input, .mv-admin-field select{
+  width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:8px;
+  font-size:0.85rem; background:var(--bg-soft); color:var(--text);
+}
+.mv-btn-admin{
+  padding:10px 18px; border-radius:9px; font-size:0.84rem; font-weight:700;
+  background:linear-gradient(135deg, var(--grad-3), var(--grad-5)); color:#fff; border:none;
+  align-self:flex-end; white-space:nowrap; transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.mv-btn-admin:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(127,95,255,0.4); }
+.mv-admin-status{
+  font-size:0.78rem; padding:9px 11px; border-radius:8px; border:1px solid var(--line);
+  background:var(--bg-soft); color:var(--text-dim);
+}
+.mv-admin-status.good{ background:var(--good-bg); color:var(--good); border-color:rgba(46,230,168,0.4); }
+.mv-admin-status.error{ background:var(--late-bg); color:var(--late); border-color:rgba(255,107,107,0.4); }
+
+/* Ledger panel */
+.mv-date-input{
+  padding:8px 11px; border:1px solid var(--line); border-radius:9px; font-size:0.8rem;
+  background:var(--bg-soft); color:var(--text); font-family:'JetBrains Mono',monospace;
+}
+.mv-table-wrap{ overflow-x:auto; }
+table.mv-ledger{ width:100%; border-collapse:collapse; font-size:0.84rem; min-width:560px; }
+table.mv-ledger th{
+  text-align:left; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-dim);
+  border-bottom:1px solid var(--line); padding:8px;
+}
+table.mv-ledger td{ padding:11px 8px; border-bottom:1px solid var(--line); font-family:'JetBrains Mono',monospace; font-size:0.82rem; }
+table.mv-ledger tbody tr{ transition: background 0.15s ease; }
+table.mv-ledger tbody tr:hover{ background:rgba(255,255,255,0.03); }
+table.mv-ledger td.mv-name-cell{ font-family:'Inter',sans-serif; font-weight:600; }
+.mv-pill{ display:inline-block; padding:3px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; font-family:'Inter',sans-serif; }
+.mv-pill.good{ background:var(--good-bg); color:var(--good); }
+.mv-pill.late{ background:var(--late-bg); color:var(--late); }
+.mv-pill.muted{ background:rgba(255,255,255,0.06); color:var(--text-dim); }
+.mv-pill.adm{ background:var(--admin-bg); color:var(--admin); font-size:0.6rem; margin-left:5px; }
+.mv-btn-del{
+  padding:4px 10px; border-radius:7px; font-size:0.7rem; font-weight:700;
+  background:var(--late-bg); color:var(--late); border:1px solid rgba(255,107,107,0.4);
+  transition: all 0.15s ease;
+}
+.mv-btn-del:hover{ background:var(--late); color:#fff; transform:translateY(-1px); }
+.mv-empty{ text-align:center; padding:40px 10px; color:var(--text-dim); font-size:0.86rem; }
+.mv-empty svg{ opacity:0.4; margin-bottom:10px; animation: floatY 3s ease-in-out infinite; }
+
+.mv-export-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.mv-btn-export{
+  display:inline-flex; align-items:center; gap:7px; padding:10px 16px; border-radius:10px;
+  font-size:0.82rem; font-weight:700; border:none; color:#fff;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.mv-btn-export.green{ background:linear-gradient(135deg, #1EAE7A, var(--good)); box-shadow:0 6px 16px rgba(46,230,168,0.25); }
+.mv-btn-export.blue{ background:linear-gradient(135deg, #4A3FD9, var(--grad-3)); box-shadow:0 6px 16px rgba(127,95,255,0.3); }
+.mv-btn-export:hover{ transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,0.3); }
+.mv-month-box{
+  display:none; margin-top:12px; padding:15px 16px; background:var(--bg-soft);
+  border:1px solid var(--line); border-radius:var(--radius-sm); animation: popIn 0.3s ease;
+}
+.mv-share-note{ font-size:0.72rem; color:var(--text-dim); margin-top:12px; }
+
+/* Chart card */
+.mv-chart-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:22px 24px; margin-top:20px; animation: fadeUp 0.65s ease both;
+}
+.mv-bars{ display:flex; align-items:flex-end; gap:10px; height:140px; margin-top:18px; padding:0 4px; }
+.mv-bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end; }
+.mv-bar{
+  width:100%; max-width:34px; border-radius:7px 7px 3px 3px;
+  background:linear-gradient(180deg, var(--grad-3), var(--grad-5));
+  box-shadow:0 4px 14px rgba(127,95,255,0.3);
+  transition: height 0.6s cubic-bezier(.2,.8,.2,1), transform 0.2s ease;
+  min-height:4px;
+}
+.mv-bar-col:hover .mv-bar{ transform:scaleY(1.03); filter:brightness(1.15); }
+.mv-bar-label{ font-size:0.64rem; color:var(--text-dim); font-family:'JetBrains Mono',monospace; }
+</style>
+
+<div class="mv-sidebar">
+  <div class="mv-logo">
+    <div class="mv-logo-mark">M</div>
+    <div class="mv-logo-text"><strong>MediaVise</strong><span>Attendance OS</span></div>
+  </div>
+  <nav class="mv-nav">
+    <div class="mv-nav-item active" style="animation-delay:0.05s">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+      Dashboard
     </div>
-    <div class="clock-block">
-      <div class="clock" id="liveClock">--:--:--</div>
-      <div class="clock-date" id="liveDate">loading</div>
+    <div class="mv-nav-item" style="animation-delay:0.1s">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Employees
+    </div>
+    <div class="mv-nav-item" style="animation-delay:0.15s">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reports
+    </div>
+    <div class="mv-nav-item" style="animation-delay:0.2s">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </div>
+  </nav>
+  <div class="mv-sidebar-clock">
+    <div class="t" id="sideClock">--:--:--</div>
+    <div class="d" id="sideDate">loading</div>
+  </div>
+</div>
+
+<div class="mv-main">
+
+  <div class="mv-topbar">
+    <div class="mv-greeting">
+      <h1>Attendance Dashboard</h1>
+      <p>Track punches, manage records, export reports.</p>
+    </div>
+    <div class="mv-status-chip"><span class="dot"></span> Live tracking</div>
+  </div>
+
+  <div class="mv-stats">
+    <div class="mv-stat-card c1">
+      <div class="mv-stat-top">
+        <div class="mv-stat-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B9A9FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      </div>
+      <div class="mv-stat-label">Checked in</div>
+      <div class="mv-stat-num" id="statPresent">0</div>
+    </div>
+    <div class="mv-stat-card c2">
+      <div class="mv-stat-top">
+        <div class="mv-stat-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2EE6A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      </div>
+      <div class="mv-stat-label">On time</div>
+      <div class="mv-stat-num" id="statOnTime">0</div>
+    </div>
+    <div class="mv-stat-card c3">
+      <div class="mv-stat-top">
+        <div class="mv-stat-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      </div>
+      <div class="mv-stat-label">Late</div>
+      <div class="mv-stat-num" id="statLate">0</div>
+    </div>
+    <div class="mv-stat-card c4">
+      <div class="mv-stat-top">
+        <div class="mv-stat-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#36D6E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      </div>
+      <div class="mv-stat-label">Checked out</div>
+      <div class="mv-stat-num" id="statOut">0</div>
     </div>
   </div>
 
-  <div class="timeline-card">
-    <div class="timeline-head">
-      <div class="eyebrow">Day timeline</div>
-      <div class="timeline-rules">Check in by <b>12:30 PM</b> to stay On Time · Day runs until <b>8:00 PM</b></div>
+  <div class="mv-timeline-card">
+    <div class="mv-timeline-head">
+      <div class="mv-eyebrow">Day timeline</div>
+      <div class="mv-timeline-rules">Check in by <b>12:30 PM</b> to stay On Time · Day runs until <b>8:00 PM</b></div>
     </div>
-    <div class="timeline-track" id="track">
-      <div class="timeline-segment seg-on-time" id="segOnTime"></div>
-      <div class="timeline-segment seg-after-hours" id="segAfterHours"></div>
-      <div class="tick" id="tickLate"></div>
-      <div class="tick-label" id="tickLateLabel">12:30 PM</div>
-      <div class="tick" id="tickEnd"></div>
-      <div class="tick-label" id="tickEndLabel">8:00 PM</div>
-      <div class="now-label" id="nowLabel">now</div>
-      <div class="now-dot" id="nowDot"></div>
+    <div class="mv-track" id="track">
+      <div class="mv-seg-good" id="segOnTime"></div>
+      <div class="mv-seg-late" id="segAfterHours"></div>
+      <div class="mv-tick" id="tickLate"></div>
+      <div class="mv-tick-label" id="tickLateLabel">12:30 PM</div>
+      <div class="mv-tick" id="tickEnd"></div>
+      <div class="mv-tick-label" id="tickEndLabel">8:00 PM</div>
+      <div class="mv-now-label" id="nowLabel">now</div>
+      <div class="mv-now-dot" id="nowDot"></div>
     </div>
   </div>
 
-  <div class="grid">
-    <div class="panel">
-      <div class="panel-head">
-        <div class="eyebrow">Punch card</div>
-      </div>
+  <div class="mv-grid">
+    <div class="mv-panel">
+      <div class="mv-panel-head"><div class="mv-eyebrow">Punch card</div></div>
 
-      <button class="admin-toggle" id="adminToggleBtn" onclick="toggleAdmin()">⚙ Admin punch</button>
+      <button class="mv-admin-toggle" id="adminToggleBtn" onclick="toggleAdmin()">⚙ Admin punch</button>
 
-      <div class="admin-section" id="adminSection" style="display:none;">
-        <span class="admin-eyebrow">Admin — Manual Punch</span>
-        <div class="admin-row">
-          <div class="admin-field">
+      <div class="mv-admin-section" id="adminSection" style="display:none;">
+        <span class="mv-admin-eyebrow">Admin — Manual Punch</span>
+        <div class="mv-admin-row">
+          <div class="mv-admin-field">
             <label>Employee name</label>
             <input type="text" id="adminName" placeholder="e.g. Ali Hassan" autocomplete="off">
           </div>
-          <div class="admin-field">
+          <div class="mv-admin-field">
             <label>Type</label>
             <select id="adminType">
               <option value="in">Check In</option>
@@ -332,53 +454,82 @@
             </select>
           </div>
         </div>
-        <div class="admin-row">
-          <div class="admin-field">
+        <div class="mv-admin-row">
+          <div class="mv-admin-field">
             <label>Time (24hr)</label>
             <input type="time" id="adminTime">
           </div>
-          <div class="admin-field">
+          <div class="mv-admin-field">
             <label>Date</label>
             <input type="date" id="adminDate">
           </div>
-          <button class="btn-admin" onclick="adminPunch()">Punch</button>
+          <button class="mv-btn-admin" onclick="adminPunch()">Punch</button>
         </div>
-        <div class="admin-status" id="adminStatus">Fill in details above and hit Punch.</div>
+        <div class="mv-admin-status" id="adminStatus">Fill in details above and hit Punch.</div>
       </div>
 
-      <label class="field-label" for="nameInput">Your name</label>
-      <input class="name-input" id="nameInput" type="text" placeholder="e.g. Asha Rao" autocomplete="off">
-      <div class="btn-row">
-        <button class="btn btn-in" id="checkInBtn">Check in</button>
-        <button class="btn btn-out" id="checkOutBtn">Check out</button>
+      <label class="mv-field-label" for="nameInput">Your name</label>
+      <input class="mv-input" id="nameInput" type="text" placeholder="e.g. Asha Rao" autocomplete="off">
+      <div class="mv-btn-row">
+        <button class="mv-btn mv-btn-in" id="checkInBtn">Check in</button>
+        <button class="mv-btn mv-btn-out" id="checkOutBtn">Check out</button>
       </div>
-      <div class="status-box" id="statusBox">Pick a name and punch in to get started.</div>
-      <div class="legend">
+      <div class="mv-status-box" id="statusBox">Pick a name and punch in to get started.</div>
+      <div class="mv-legend">
         On Time = checked in at or before 12:30 PM. Late = checked in after 12:30 PM.<br>
         Full Day = checked out at or after 8:00 PM. Left Early = checked out before 8:00 PM.
       </div>
     </div>
 
-    <div class="panel">
-      <div class="panel-head">
-        <div class="eyebrow">Today's ledger</div>
-        <input class="date-input" id="dateInput" type="date">
+    <div class="mv-panel">
+      <div class="mv-panel-head">
+        <div class="mv-eyebrow">Today's ledger</div>
+        <input class="mv-date-input" id="dateInput" type="date">
       </div>
-      <div class="stats-row">
-        <div class="stat-chip"><div class="stat-num" id="statPresent">0</div><div class="stat-label">Checked in</div></div>
-        <div class="stat-chip"><div class="stat-num" id="statLate">0</div><div class="stat-label">Late</div></div>
-        <div class="stat-chip"><div class="stat-num" id="statOut">0</div><div class="stat-label">Checked out</div></div>
+      <div class="mv-table-wrap" id="ledgerWrap">
+        <div class="mv-empty">Loading ledger…</div>
       </div>
-      <div id="ledgerWrap">
-        <div class="empty-state">Loading ledger…</div>
+      <div class="mv-share-note">Synced live across all devices via shared database.</div>
+      <div class="mv-export-row">
+        <button class="mv-btn-export green" onclick="exportExcel()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Today (Excel)
+        </button>
+        <button class="mv-btn-export blue" onclick="toggleMonthExport()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Export Month (CSV)
+        </button>
       </div>
-      <div class="share-note">Data stored locally on this device (localStorage).</div>
+      <div class="mv-month-box" id="monthExportBox">
+        <label class="mv-field-label" for="monthInput">Select month</label>
+        <input type="month" id="monthInput" class="mv-input" style="margin-bottom:10px;">
+        <button class="mv-btn-export blue" style="width:100%; justify-content:center;" onclick="exportMonthCSV()">Download CSV</button>
+      </div>
     </div>
   </div>
+
+  <div class="mv-chart-card">
+    <div class="mv-panel-head">
+      <div class="mv-eyebrow">Last 7 days — check-ins</div>
+    </div>
+    <div class="mv-bars" id="weekBars"></div>
+  </div>
+
+</div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 (function(){
+  const SUPABASE_URL = 'https://cvwskhelsmzwnqzbbfst.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_JUsy0L5W6wP9M3UINB0mlA_r3tBEa2m';
+  const REST = `${SUPABASE_URL}/rest/v1/attendance`;
+  const HEADERS = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json'
+  };
+
   const LATE_CUTOFF_MIN = 12 * 60 + 30;
   const DAYEND_CUTOFF_MIN = 20 * 60;
   const DAY_MIN = 24 * 60;
@@ -412,25 +563,90 @@
     return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
-  // localStorage helpers
-  function getRec(dateStr, key){
-    try{ const v=localStorage.getItem(`att:${dateStr}:${key}`); return v?JSON.parse(v):null; }catch(e){ return null; }
-  }
-  function saveRec(dateStr, key, rec){
-    try{ localStorage.setItem(`att:${dateStr}:${key}`, JSON.stringify(rec)); return true; }catch(e){ return false; }
-  }
-  function listRecs(dateStr){
-    const pfx=`att:${dateStr}:`, out=[];
-    for(let i=0;i<localStorage.length;i++){
-      const k=localStorage.key(i);
-      if(k&&k.startsWith(pfx)){ try{ const r=JSON.parse(localStorage.getItem(k)); if(r) out.push(r); }catch(e){} }
-    }
-    return out;
+  // Map DB row (snake_case) -> app record (camelCase) used by render functions
+  function rowToRec(row){
+    return {
+      name: row.name,
+      checkIn: row.check_in,
+      checkInStatus: row.check_in_status,
+      checkOut: row.check_out,
+      checkOutStatus: row.check_out_status,
+      byAdmin: row.by_admin,
+      date: row.date,
+      slug: row.slug
+    };
   }
 
-  // Clock
-  const liveClock=document.getElementById('liveClock');
-  const liveDate=document.getElementById('liveDate');
+  // ---------- Supabase REST helpers ----------
+  async function getRec(dateStr, key){
+    try{
+      const res = await fetch(`${REST}?date=eq.${encodeURIComponent(dateStr)}&slug=eq.${encodeURIComponent(key)}&select=*`, { headers: HEADERS });
+      if(!res.ok) return null;
+      const data = await res.json();
+      return data.length ? rowToRec(data[0]) : null;
+    }catch(e){ console.error('getRec error', e); return null; }
+  }
+
+  async function upsertRec(dateStr, key, rec){
+    try{
+      const payload = {
+        date: dateStr,
+        slug: key,
+        name: rec.name,
+        check_in: rec.checkIn,
+        check_in_status: rec.checkInStatus,
+        check_out: rec.checkOut,
+        check_out_status: rec.checkOutStatus,
+        by_admin: !!rec.byAdmin
+      };
+      const res = await fetch(`${REST}?on_conflict=date,slug`, {
+        method: 'POST',
+        headers: Object.assign({}, HEADERS, { 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+        body: JSON.stringify(payload)
+      });
+      return res.ok;
+    }catch(e){ console.error('upsertRec error', e); return false; }
+  }
+
+  async function listRecs(dateStr){
+    try{
+      const res = await fetch(`${REST}?date=eq.${encodeURIComponent(dateStr)}&select=*`, { headers: HEADERS });
+      if(!res.ok) return [];
+      const data = await res.json();
+      return data.map(rowToRec);
+    }catch(e){ console.error('listRecs error', e); return []; }
+  }
+
+  async function listRecsForMonth(monthStr){
+    try{
+      // monthStr = "YYYY-MM" -> range from first to last day of month
+      const [y,m] = monthStr.split('-').map(Number);
+      const from = `${monthStr}-01`;
+      const lastDay = new Date(y, m, 0).getDate();
+      const to = `${monthStr}-${pad(lastDay)}`;
+      const res = await fetch(`${REST}?date=gte.${from}&date=lte.${to}&select=*`, { headers: HEADERS });
+      if(!res.ok) return [];
+      const data = await res.json();
+      return data.map(rowToRec);
+    }catch(e){ console.error('listRecsForMonth error', e); return []; }
+  }
+
+  async function deleteRecRemote(dateStr, key){
+    try{
+      const res = await fetch(`${REST}?date=eq.${encodeURIComponent(dateStr)}&slug=eq.${encodeURIComponent(key)}`, {
+        method: 'DELETE',
+        headers: HEADERS
+      });
+      return res.ok;
+    }catch(e){ console.error('deleteRec error', e); return false; }
+  }
+
+  // Cache of last 7 days' counts to avoid hammering the API every refresh
+  let weekCache = {};
+
+  // Clocks
+  const liveClock=document.getElementById('sideClock');
+  const liveDate=document.getElementById('sideDate');
   const nowDot=document.getElementById('nowDot');
   const nowLabel=document.getElementById('nowLabel');
   const latePct=(LATE_CUTOFF_MIN/DAY_MIN)*100;
@@ -453,7 +669,6 @@
   }
   tickClock(); setInterval(tickClock,1000);
 
-  // Admin toggle
   window.toggleAdmin=function(){
     const sec=document.getElementById('adminSection');
     const btn=document.getElementById('adminToggleBtn');
@@ -467,50 +682,49 @@
     }
   };
 
-  // Admin punch
-  window.adminPunch=function(){
+  window.adminPunch=async function(){
     const name=document.getElementById('adminName').value.trim();
     const type=document.getElementById('adminType').value;
     const timeVal=document.getElementById('adminTime').value;
     const dateVal=document.getElementById('adminDate').value;
     const st=document.getElementById('adminStatus');
-
-    function setAdm(msg,cls){ st.textContent=msg; st.className='admin-status'+(cls?' '+cls:''); }
+    function setAdm(msg,cls){ st.textContent=msg; st.className='mv-admin-status'+(cls?' '+cls:''); }
 
     if(!name){ setAdm('Enter employee name.','error'); return; }
     if(!timeVal){ setAdm('Enter a time.','error'); return; }
     if(!dateVal){ setAdm('Enter a date.','error'); return; }
 
+    setAdm('Saving…');
+
     const [hh,mm]=timeVal.split(':').map(Number);
     const punchDate=new Date(dateVal);
     punchDate.setHours(hh,mm,0,0);
     const mins=hh*60+mm;
-
     const key=slug(name);
-    let rec=getRec(dateVal,key)||{name,checkIn:null,checkInStatus:null,checkOut:null,checkOutStatus:null,byAdmin:false};
+    let rec=await getRec(dateVal,key) || {name,checkIn:null,checkInStatus:null,checkOut:null,checkOutStatus:null,byAdmin:false};
 
     if(type==='in'){
-      rec.name=name;
-      rec.checkIn=punchDate.toISOString();
+      rec.name=name; rec.checkIn=punchDate.toISOString();
       rec.checkInStatus=mins<=LATE_CUTOFF_MIN?'On Time':'Late';
       rec.byAdmin=true;
-      if(saveRec(dateVal,key,rec)){
+      const ok = await upsertRec(dateVal,key,rec);
+      if(ok){
         setAdm(`✓ ${name} → In at ${fmtShort(rec.checkIn)} · ${rec.checkInStatus}`,'good');
-        refreshLedger();
-      } else { setAdm('Save failed.','error'); }
+        refreshAll();
+      } else { setAdm('Save failed. Check connection.','error'); }
     } else {
       if(!rec.checkIn){ setAdm(`No check-in found for ${name} on ${dateVal}. Add check-in first.`,'error'); return; }
       rec.checkOut=punchDate.toISOString();
       rec.checkOutStatus=mins>=DAYEND_CUTOFF_MIN?'Full Day':'Left Early';
       rec.byAdmin=true;
-      if(saveRec(dateVal,key,rec)){
+      const ok = await upsertRec(dateVal,key,rec);
+      if(ok){
         setAdm(`✓ ${name} → Out at ${fmtShort(rec.checkOut)} · ${rec.checkOutStatus}`,'good');
-        refreshLedger();
-      } else { setAdm('Save failed.','error'); }
+        refreshAll();
+      } else { setAdm('Save failed. Check connection.','error'); }
     }
   };
 
-  // Regular punch
   const nameInput=document.getElementById('nameInput');
   const statusBox=document.getElementById('statusBox');
   const checkInBtn=document.getElementById('checkInBtn');
@@ -518,16 +732,17 @@
 
   function setStatus(msg,cls){
     statusBox.textContent=msg;
-    statusBox.className='status-box'+(cls?' '+cls:'');
+    statusBox.className='mv-status-box'+(cls?' '+cls:'');
   }
 
-  checkInBtn.addEventListener('click',()=>{
+  checkInBtn.addEventListener('click', async ()=>{
     const name=nameInput.value.trim();
     if(!name){ setStatus('Enter your name to check in.','error'); return; }
     checkInBtn.disabled=true;
+    setStatus('Checking in…');
     const dateStr=todayStr();
     const key=slug(name);
-    const ex=getRec(dateStr,key);
+    const ex=await getRec(dateStr,key);
     if(ex&&ex.checkIn){
       setStatus(`Already checked in at ${fmtShort(ex.checkIn)} · ${ex.checkInStatus}`,ex.checkInStatus==='Late'?'late':'good');
       checkInBtn.disabled=false; return;
@@ -536,20 +751,22 @@
     const status=minSinceMid(now)<=LATE_CUTOFF_MIN?'On Time':'Late';
     const rec=ex||{name,checkIn:null,checkInStatus:null,checkOut:null,checkOutStatus:null,byAdmin:false};
     rec.name=name; rec.checkIn=now.toISOString(); rec.checkInStatus=status;
-    if(saveRec(dateStr,key,rec)){
+    const ok = await upsertRec(dateStr,key,rec);
+    if(ok){
       setStatus(`Checked in at ${fmtShort(rec.checkIn)} · ${status}`,status==='Late'?'late':'good');
-      refreshLedger();
-    } else { setStatus('Could not save. Try again.','error'); }
+      refreshAll();
+    } else { setStatus('Could not save. Check your internet connection.','error'); }
     checkInBtn.disabled=false;
   });
 
-  checkOutBtn.addEventListener('click',()=>{
+  checkOutBtn.addEventListener('click', async ()=>{
     const name=nameInput.value.trim();
     if(!name){ setStatus('Enter your name to check out.','error'); return; }
     checkOutBtn.disabled=true;
+    setStatus('Checking out…');
     const dateStr=todayStr();
     const key=slug(name);
-    const ex=getRec(dateStr,key);
+    const ex=await getRec(dateStr,key);
     if(!ex||!ex.checkIn){ setStatus('No check-in found. Check in first.','error'); checkOutBtn.disabled=false; return; }
     if(ex.checkOut){
       setStatus(`Already checked out at ${fmtShort(ex.checkOut)} · ${ex.checkOutStatus}`,ex.checkOutStatus==='Left Early'?'late':'good');
@@ -558,54 +775,187 @@
     const now=new Date();
     const status=minSinceMid(now)>=DAYEND_CUTOFF_MIN?'Full Day':'Left Early';
     ex.checkOut=now.toISOString(); ex.checkOutStatus=status;
-    if(saveRec(dateStr,key,ex)){
+    const ok = await upsertRec(dateStr,key,ex);
+    if(ok){
       setStatus(`Checked out at ${fmtShort(ex.checkOut)} · ${status}`,status==='Left Early'?'late':'good');
-      refreshLedger();
-    } else { setStatus('Could not save. Try again.','error'); }
+      refreshAll();
+    } else { setStatus('Could not save. Check your internet connection.','error'); }
     checkOutBtn.disabled=false;
   });
 
-  // Ledger
   const dateInput=document.getElementById('dateInput');
   const ledgerWrap=document.getElementById('ledgerWrap');
   dateInput.value=todayStr();
 
-  function renderLedger(records, dateStr){
-    document.getElementById('statPresent').textContent=records.length;
-    document.getElementById('statLate').textContent=records.filter(r=>r.checkInStatus==='Late').length;
-    document.getElementById('statOut').textContent=records.filter(r=>r.checkOut).length;
+  function animateNum(el, to){
+    const from = parseInt(el.textContent) || 0;
+    if(from === to){ el.textContent = to; return; }
+    const dur = 400, start = performance.now();
+    function step(t){
+      const p = Math.min(1, (t - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (to - from) * eased);
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
 
-    if(!records.length){ ledgerWrap.innerHTML='<div class="empty-state">No punches yet for this day.</div>'; return; }
+  function renderLedger(records, dateStr){
+    const total = records.length;
+    const late = records.filter(r=>r.checkInStatus==='Late').length;
+    const onTime = total - late;
+    const out = records.filter(r=>r.checkOut).length;
+
+    animateNum(document.getElementById('statPresent'), total);
+    animateNum(document.getElementById('statOnTime'), onTime);
+    animateNum(document.getElementById('statLate'), late);
+    animateNum(document.getElementById('statOut'), out);
+
+    if(!records.length){
+      ledgerWrap.innerHTML = `<div class="mv-empty">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg>
+        <div>No punches yet for this day.</div>
+      </div>`;
+      return;
+    }
     records.sort((a,b)=>(a.checkIn||'').localeCompare(b.checkIn||''));
     const rows=records.map(r=>{
-      const admTag=r.byAdmin?'<span class="pill adm">admin</span>':'';
-      const inPill=r.checkInStatus==='Late'?`<span class="pill late">Late</span>`:`<span class="pill good">On Time</span>`;
-      const outPill=!r.checkOut?`<span class="pill muted">—</span>`:(r.checkOutStatus==='Left Early'?`<span class="pill late">Left Early</span>`:`<span class="pill good">Full Day</span>`);
+      const admTag=r.byAdmin?'<span class="mv-pill adm">admin</span>':'';
+      const inPill=r.checkInStatus==='Late'?`<span class="mv-pill late">Late</span>`:`<span class="mv-pill good">On Time</span>`;
+      const outPill=!r.checkOut?`<span class="mv-pill muted">—</span>`:(r.checkOutStatus==='Left Early'?`<span class="mv-pill late">Left Early</span>`:`<span class="mv-pill good">Full Day</span>`);
       return `<tr>
-        <td class="name-cell">${esc(r.name)}${admTag}</td>
+        <td class="mv-name-cell">${esc(r.name)}${admTag}</td>
         <td>${fmtShort(r.checkIn)}</td>
         <td>${inPill}</td>
         <td>${r.checkOut?fmtShort(r.checkOut):'—'}</td>
         <td>${outPill}</td>
-        <td><button class="btn-del" onclick="deleteRec('${dateStr}','${slug(r.name)}')">✕ Delete</button></td>
+        <td><button class="mv-btn-del" onclick="deleteRec('${dateStr}','${slug(r.name)}')">✕ Delete</button></td>
       </tr>`;
     }).join('');
-    ledgerWrap.innerHTML=`<table class="ledger"><thead><tr><th>Name</th><th>In</th><th>In status</th><th>Out</th><th>Out status</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+    ledgerWrap.innerHTML=`<table class="mv-ledger"><thead><tr><th>Name</th><th>In</th><th>In status</th><th>Out</th><th>Out status</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
   }
 
-  function refreshLedger(){
+  async function renderWeekChart(){
+    const wrap = document.getElementById('weekBars');
+    const days = [];
+    for(let i=6;i>=0;i--){
+      const d = new Date();
+      d.setDate(d.getDate()-i);
+      days.push(d);
+    }
+    const counts = await Promise.all(days.map(async d => {
+      const ds = todayStr(d);
+      const recs = await listRecs(ds);
+      return recs.length;
+    }));
+    const max = Math.max(1, ...counts);
+    wrap.innerHTML = days.map((d,i)=>{
+      const h = Math.round((counts[i]/max)*120) + 4;
+      const label = d.toLocaleDateString(undefined,{weekday:'short'});
+      return `<div class="mv-bar-col">
+        <div class="mv-bar" style="height:${h}px" title="${counts[i]} check-ins"></div>
+        <div class="mv-bar-label">${label}</div>
+      </div>`;
+    }).join('');
+  }
+
+  async function refreshAll(){
     const dateStr=dateInput.value||todayStr();
-    renderLedger(listRecs(dateStr), dateStr);
+    const recs = await listRecs(dateStr);
+    renderLedger(recs, dateStr);
+    renderWeekChart();
   }
 
-  window.deleteRec=function(dateStr, key){
+  window.deleteRec=async function(dateStr, key){
     if(!confirm('Delete this record?')) return;
-    localStorage.removeItem(`att:${dateStr}:${key}`);
-    refreshLedger();
+    const ok = await deleteRecRemote(dateStr, key);
+    if(ok){ refreshAll(); } else { alert('Delete failed. Check your connection.'); }
   };
 
-  dateInput.addEventListener('change',refreshLedger);
-  refreshLedger();
-  setInterval(refreshLedger,20000);
+  window.exportExcel = async function(){
+    const dateStr = document.getElementById('dateInput').value || todayStr();
+    const records = await listRecs(dateStr);
+    if(!records.length){ alert('No data to export for this date.'); return; }
+    records.sort((a,b)=>(a.checkIn||'').localeCompare(b.checkIn||''));
+
+    const wsData = [
+      ['MediaVise Attendance Report'],
+      [`Date: ${dateStr}`],
+      [`Generated: ${new Date().toLocaleString()}`],
+      [],
+      ['#', 'Employee Name', 'Check In Time', 'Check In Status', 'Check Out Time', 'Check Out Status', 'Punched By']
+    ];
+    records.forEach((r, i) => {
+      wsData.push([i+1, r.name, r.checkIn?fmtShort(r.checkIn):'—', r.checkInStatus||'—', r.checkOut?fmtShort(r.checkOut):'Not checked out', r.checkOutStatus||'—', r.byAdmin?'Admin':'Self']);
+    });
+    const total = records.length;
+    const late = records.filter(r=>r.checkInStatus==='Late').length;
+    const onTime = total - late;
+    const checkedOut = records.filter(r=>r.checkOut).length;
+    wsData.push([]);
+    wsData.push(['Summary']);
+    wsData.push(['Total Present', total]);
+    wsData.push(['On Time', onTime]);
+    wsData.push(['Late', late]);
+    wsData.push(['Checked Out', checkedOut]);
+    wsData.push(['Still In Office', total - checkedOut]);
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    ws['!cols'] = [{wch:4},{wch:22},{wch:14},{wch:14},{wch:18},{wch:16},{wch:12}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Attendance');
+    XLSX.writeFile(wb, `MediaVise_Attendance_${dateStr}.xlsx`);
+  };
+
+  window.toggleMonthExport = function(){
+    const box = document.getElementById('monthExportBox');
+    const open = box.style.display !== 'none';
+    box.style.display = open ? 'none' : 'block';
+    if(!open){
+      const now = new Date();
+      document.getElementById('monthInput').value = `${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+    }
+  };
+
+  window.exportMonthCSV = async function(){
+    const monthVal = document.getElementById('monthInput').value;
+    if(!monthVal){ alert('Select a month first.'); return; }
+    const records = await listRecsForMonth(monthVal);
+    if(!records.length){ alert('No attendance data found for this month.'); return; }
+    records.sort((a,b)=> a.date===b.date ? (a.name||'').localeCompare(b.name||'') : a.date.localeCompare(b.date));
+
+    const header = ['Date','Employee Name','Check In Time','Check In Status','Check Out Time','Check Out Status','Punched By'];
+    const rows = records.map(r => [r.date, r.name, r.checkIn?fmtShort(r.checkIn):'', r.checkInStatus||'', r.checkOut?fmtShort(r.checkOut):'', r.checkOutStatus||'', r.byAdmin?'Admin':'Self']);
+
+    function csvEscape(val){
+      const s = String(val ?? '');
+      if(s.includes(',') || s.includes('"') || s.includes('\n')){ return '"' + s.replace(/"/g,'""') + '"'; }
+      return s;
+    }
+    let csv = header.map(csvEscape).join(',') + '\r\n';
+    rows.forEach(row => { csv += row.map(csvEscape).join(',') + '\r\n'; });
+
+    const total = records.length;
+    const late = records.filter(r=>r.checkInStatus==='Late').length;
+    const onTime = total - late;
+    const uniqueDates = new Set(records.map(r=>r.date)).size;
+    csv += '\r\nSummary\r\n';
+    csv += `Total Punches,${total}\r\n`;
+    csv += `On Time,${onTime}\r\n`;
+    csv += `Late,${late}\r\n`;
+    csv += `Days With Activity,${uniqueDates}\r\n`;
+
+    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `MediaVise_Attendance_${monthVal}.csv`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  dateInput.addEventListener('change',refreshAll);
+  refreshAll();
+  setInterval(refreshAll,20000);
 })();
 </script>
+
